@@ -14,15 +14,15 @@ items.prepend('_id');
 let listeKanap = [];
 
 document.getElementById('items').innerHTML= listeKanap.map((kanapes)=>
-<div id="produit$(kanapes._id)" class= "card, card-size">
+`<div id="produit$(kanapes._id)" class= "card, card-size">
 <h3 class="titre-card">$(kanapes.name.toUpperCase)
 </h3>
 <img class="image-size" src="$(kanapes.imageUrl)" alt="image du meuble $(kanapes.name)"/>
  <p class="description-meuble"> $(kanapes.description)</p>
  <button id="$(kanapes.id)" class="bouton-details"></button>
  <p>$(kanapes.price.toString().replace(/0+$/,"")) Euro</p>
- </div>
- )
+ </div>`
+ );
 
 
 
