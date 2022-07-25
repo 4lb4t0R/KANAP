@@ -1,6 +1,6 @@
 
 
-//Etape 3
+/*Etape 3   Insérer les produits dans la page d’accueil*/
 
 fetch("http://localhost:3000/api/products")
  
@@ -10,7 +10,7 @@ fetch("http://localhost:3000/api/products")
     
     console.table(objetProduits);
     
-    lesKanaps(objetProduits);
+    affichageProduits(objetProduits);
   })
   
   .catch((err) => {
@@ -18,7 +18,7 @@ fetch("http://localhost:3000/api/products")
     console.log("erreur 404, sur ressource api:" + err);
   });
 
-function lesKanaps(index) {
+function affichageProduits(index) {
   
   let zoneArticle = document.querySelector("#items");
  
@@ -34,7 +34,8 @@ function lesKanaps(index) {
   }
 }
     
- //Etape 4   
+ /*Etape 4   Faire le lien entre un produit de la page
+d’accueil et la page Produit*/
 
 
 
