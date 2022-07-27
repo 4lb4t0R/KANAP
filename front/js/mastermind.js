@@ -1,6 +1,5 @@
 
 
-/*Etape 3   Insérer les produits dans la page d’accueil*/
 
 fetch("http://localhost:3000/api/products")
  
@@ -34,8 +33,7 @@ function affichageProduits(index) {
   }
 }
     
- /*Etape 4   Faire le lien entre un produit de la page
-d’accueil et la page Produit*/
+
 
 
 
