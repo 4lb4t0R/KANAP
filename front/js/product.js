@@ -40,3 +40,45 @@ fetch("http://localhost:3000/api/products")
   }
   console.log("affichage effectué");
 }
+
+//CHOIX DE COULEURS
+
+let choixCouleur = document.querySelector("#colors");
+choixCouleur.addEventListener("input", (ec) => {
+  let couleurProduit;
+  couleurProduit = ec.target.value;
+  articleClient.couleur = couleurProduit;
+  document.querySelector("#addToCart").style.color = "white";
+  document.querySelector("#addToCart").textContent = "Ajouter au panier";
+  console.log(couleurProduit);
+});
+
+//CHOIX QUANTITE PRODUIT
+
+let choixQuantité = document.querySelector('input[id="quantity"]');
+let quantitéProduit;
+choixQuantité.addEventListener("input", (eq) => {
+  quantitéProduit = eq.target.value;
+  articleClient.quantité = quantitéProduit;
+  document.querySelector("#addToCart").style.color = "white";
+  document.querySelector("#addToCart").textContent = "Ajouter au panier";
+  console.log(quantitéProduit);
+});
+
+//VALIDATION PANIER
+
+let choixProduit = document.querySelector("#addToCart");
+choixProduit.addEventListener("click", () => {
+  if (
+    articleClient.quantité < 1 ||
+    articleClient.quantité > 100 ||
+    articleClient.quantité === undefined ||
+    articleClient.couleur === "" ||
+    articleClient.couleur === undefined
+  ) { alert("Pour valider votre choix, veuillez choisir une couleur, et/ou une quantité comprise entre 1 et 100");
+} else {Panier();
+  console.log("clic effectué");
+  document.querySelector("#addToCart").style.color = "rgb(0, 205, 0)";
+    document.querySelector("#addToCart").textContent = "Produit ajouté !";
+  }
+});
