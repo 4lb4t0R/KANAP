@@ -39,7 +39,7 @@ fetch("http://localhost:3000/api/products")
     }
   }
   console.log("affichage effectué");
-}
+};
 
 //CHOIX DE COULEURS
 
@@ -75,8 +75,8 @@ choixProduit.addEventListener("click", () => {
     articleClient.quantité === undefined ||
     articleClient.couleur === "" ||
     articleClient.couleur === undefined
-  ) { alert("Pour valider votre choix, veuillez choisir une couleur, et/ou une quantité comprise entre 1 et 100");
-} else {Panier();
+  ) { alert("Pour valider votre choix, veuillez choisir une couleur, et/ou une quantité comprise entre 1 et 100");}
+ else {Panier();
   console.log("clic effectué");
   document.querySelector("#addToCart").style.color = "rgb(0, 205, 0)";
     document.querySelector("#addToCart").textContent = "Produit ajouté !";
