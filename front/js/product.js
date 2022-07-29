@@ -82,3 +82,58 @@ choixProduit.addEventListener("click", () => {
     document.querySelector("#addToCart").textContent = "Produit ajouté !";
   }
 });
+
+//INITIALISATION PANIER
+
+let choixProduitClient=[];
+let produitsEnregistrés = [];
+let produitsTemporaires = [];
+let produitsaPousser = [];
+
+//AJOUT PRODUIT DANS TABLEAU VIDE
+
+function ajoutPremierProduit() {
+  console.log(produitsEnregistrés);
+  if (produitsEnregistrés === null) {
+    choixProduitClient.push(articleClient);
+    console.log(articleClient);
+    return (localStorage.panierStocké = JSON.stringify(choixProduitClient));
+  }
+}
+
+//AJOUTE PRODUIT DANS TABLEAU NON VIERGE
+
+function ajoutAutreProduit() {
+  produitsAPousser = [];
+  produitsTemporaires.push(articleClient);
+  produitsAPousser = [...produitsEnregistrés, ...produitsTemporaires];
+  produitsAPousser.sort(function triage(a, b) {
+    if (a._id < b._id) return -1;
+    if (a._id > b._id) return 1;
+    if (a._id = b._id){
+      if (a.couleur < b.couleur) return -1;
+      if (a.couleur > b.couleur) return 1;
+    }
+    return 0;
+  });
+  produitsTemporaires = [];
+  return (localStorage.panierStocké = JSON.stringify(produitsAPousser));
+}
+
+//REGULATION ARTICLES DANS PANIER
+
+function Panier() {
+  produitsEnregistrés = JSON.parse(localStorage.getItem("panierStocké"));
+  if (produitsEnregistrés) {
+    for (let choix of produitsEnregistrés) {
+      if (choix._id === id && choix.couleur === articleClient.couleur) {
+        alert("RAPPEL: Vous avez déja choisi cet article.");
+        let additionQuantité = parseInt(choix.quantité) + parseInt(quantitéProduit);
+        choix.quantité = JSON.stringify(additionQuantité);
+        return (localStorage.panierStocké = JSON.stringify(produitsEnregistrés));
+      }
+    }
+    return ajoutAutreProduit();
+  }
+  return ajoutPremierProduit();
+}
