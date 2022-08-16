@@ -371,8 +371,8 @@ if (panier && panier.length > 0) {
     panierId.push(indice._id);
   }
 } else {
-  console.log("le panier est vide");
-  document.querySelector("#order").setAttribute("value", "Panier vide!");
+  console.log("Votre panier est vide");
+  document.querySelector("#order").setAttribute("value", "Panier vide !");
 }
 }
 
