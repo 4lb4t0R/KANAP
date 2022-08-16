@@ -281,7 +281,6 @@ if (page.match("cart")) {
 //TXT SOUS MAIL
 if (page.match("cart")) {
     email.addEventListener("input", (e) => {
-      
       valeur = e.target.value;
       let regMatch = valeur.match(regMatchEmail);
       let regValide = valeur.search(regValideEmail);
@@ -303,3 +302,134 @@ if (page.match("cart")) {
       }
     });
   }
+
+//MODIF COULEUR SELON INFOS SAISIES OU PAS
+let valeurEcoute = "";
+function couleurRegex(regSearch, valeurEcoute, inputAction) {
+  if (valeurEcoute === "" && regSearch != 0) {
+    inputAction.style.backgroundColor = "white";
+    inputAction.style.color = "black";
+  } else if (valeurEcoute !== "" && regSearch != 0) {
+    inputAction.style.backgroundColor = "rgb(220, 50, 50)";
+    inputAction.style.color = "white";
+  } else {
+    inputAction.style.backgroundColor = "rgb(0, 138, 0)";
+    inputAction.style.color = "white";
+  }
+}
+
+//AFFICHAGE INDIVIDUEL
+function texteInfo(regex, pointage, zoneEcoute) {
+  if (page.match("cart")) {
+  zoneEcoute.addEventListener("input", (e) => {
+  valeur = e.target.value;
+  index = valeur.search(regex);
+  if (valeur === "" && index != 0) {
+    document.querySelector(pointage).textContent = "Veuillez renseigner ce champ";
+    document.querySelector(pointage).style.color = "white";
+  } else if (valeur !== "" && index != 0) {
+    document.querySelector(pointage).innerHTML = "Reformulez cette donnée";
+    document.querySelector(pointage).style.color = "white";
+  } else {
+  document.querySelector(pointage).innerHTML = "Caractères acceptés pour ce champ";
+  document.querySelector(pointage).style.color = "white";
+  }
+});
+}
+}
+
+//VALIDATION DYNAMIQUE
+let commande = document.querySelector("#order");
+function valideClic() {
+  let contactRef = JSON.parse(localStorage.getItem("contactClient"));
+  let somme =
+    contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
+  if (somme === 5) {
+    commande.removeAttribute("disabled", "disabled");
+    document.querySelector("#order").setAttribute("value", "Commandé(s) !");
+  } else {
+    commande.setAttribute("disabled", "disabled");
+    document.querySelector("#order").setAttribute("value", "Veuillez remplir le formulaire");
+  }
+}
+
+//ENVOI COMMANDE
+if (page.match("cart")) {
+  commande.addEventListener("click", (e) => {
+  
+    e.preventDefault();
+    valideClic();
+    envoiPaquet();
+  });
+}
+//RECUP ID PUIS STOCKAGE DANS TABLEAU
+let panierId = [];
+function tableauId() {
+let panier = JSON.parse(localStorage.getItem("panierStocké"));
+if (panier && panier.length > 0) {
+  for (let indice of panier) {
+    panierId.push(indice._id);
+  }
+} else {
+  console.log("le panier est vide");
+  document.querySelector("#order").setAttribute("value", "Panier vide!");
+}
+}
+
+//RECUP DATA CUSTOMER + PANIER
+let contactRef;
+let commandeFinale;
+function paquet() {
+  contactRef = JSON.parse(localStorage.getItem("contactClient"));
+  commandeFinale = {
+    contact: {
+      firstName: contactRef.firstName,
+      lastName: contactRef.lastName,
+      address: contactRef.address,
+      city: contactRef.city,
+      email: contactRef.email,
+    },
+    products: panierId,
+  };
+}
+
+//VALID ENVOI
+function envoiPaquet() {
+  tableauId();
+  paquet();
+  console.log(commandeFinale);
+  let somme = contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
+  if (panierId.length != 0 && somme === 5) {
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commandeFinale),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+  
+        window.location.href = `/front/html/confirmation.html?commande=${data.orderId}`;
+      })
+      .catch(function (err) {
+        console.log(err);
+        alert("erreur");
+      });
+  }
+}
+
+//REMERCIEMENT ET CLEAR STORAGE
+(function Commande() {
+  if (page.match("confirmation")) {
+    sessionStorage.clear();
+    localStorage.clear();
+    let numCom = new URLSearchParams(document.location.search).get("commande");
+    document.querySelector("#orderId").innerHTML = `<br>${numCom}<br>Merci pour votre achat !`;
+    console.log("valeur de l'orderId venant de l'url: " + numCom);
+    numCom = undefined;
+  } else {
+    console.log("sur page cart");
+  }
+})();
