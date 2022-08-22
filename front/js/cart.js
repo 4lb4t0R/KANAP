@@ -192,6 +192,7 @@ if (page.match("cart")) {
     }
     
     //REGEX 
+    let regexLettre = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ\s-]{1,31}$/i;
     let regexChiffreLettre = /^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ\s-]{1,60}$/i;
     let regValideEmail = /^[a-z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]{1,60}$/i;
     let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
@@ -424,12 +425,14 @@ function envoiPaquet() {
 (function Commande() {
   if (page.match("confirmation")) {
     sessionStorage.clear();
-    localStorage.clear();
+    window.localStorage.clear();
+    window.localStorage.removeItem("panierStocké");
     let numCom = new URLSearchParams(document.location.search).get("commande");
     document.querySelector("#orderId").innerHTML = `<br>${numCom}<br>Merci pour votre achat !`;
     console.log("valeur de l'orderId venant de l'url: " + numCom);
     numCom = undefined;
-  } else {
+  } 
+  else {
     console.log("sur page cart");
   }
 })();
