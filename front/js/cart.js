@@ -425,8 +425,7 @@ function envoiPaquet() {
 (function Commande() {
   if (page.match("confirmation")) {
     sessionStorage.clear();
-    window.localStorage.clear();
-    window.localStorage.removeItem("panierStocké");
+    localStorage.clear();
     let numCom = new URLSearchParams(document.location.search).get("commande");
     document.querySelector("#orderId").innerHTML = `<br>${numCom}<br>Merci pour votre achat !`;
     console.log("valeur de l'orderId venant de l'url: " + numCom);
