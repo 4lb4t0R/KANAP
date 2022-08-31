@@ -22,7 +22,6 @@ fetch("http://localhost:3000/api/products")
 function affichageProduits(index) {
   let zoneArticle = document.querySelector("#items");
   let html = "";
-
   for (let article of index) {
     html += `<a href="./product.html?_id=${article._id}">
     <article>
@@ -32,7 +31,6 @@ function affichageProduits(index) {
     </article>
   </a>`;
   }
-
   zoneArticle.innerHTML = html;
 }
     
