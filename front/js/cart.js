@@ -170,23 +170,23 @@ if (page.match("cart")) {
     
     //INFOS IENCLI
     if (page.match("cart")) {
-      var contactClient = {};
+      let contactClient = {};
       localStorage.contactClient = JSON.stringify(contactClient);
       
-      var prenom = document.querySelector("#firstName");
+      let prenom = document.querySelector("#firstName");
       prenom.classList.add("regex_texte");
-      var nom = document.querySelector("#lastName");
+      let nom = document.querySelector("#lastName");
       nom.classList.add("regex_texte");
-      var ville = document.querySelector("#city");
+      let ville = document.querySelector("#city");
       ville.classList.add("regex_texte");
       
-      var adresse = document.querySelector("#address");
+      let adresse = document.querySelector("#address");
       adresse.classList.add("regex_adresse");
       
-      var email = document.querySelector("#email");
+      let email = document.querySelector("#email");
       email.classList.add("regex_email");
       
-      var regexTexte = document.querySelectorAll(".regex_texte");
+      let regexTexte = document.querySelectorAll(".regex_texte");
        
       document.querySelector("#email").setAttribute("type", "text");
     }
