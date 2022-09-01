@@ -142,7 +142,8 @@ fetch("http://localhost:3000/api/products")
       document.getElementById("totalPrice").textContent = totalPrix;
     }
     
-//INFOS IENCLI
+   
+// Ajout des Regex
 
 let form = document.querySelector(".cart__order__form")
 console.log(form);
@@ -237,84 +238,89 @@ const validEmail = function(inputEmail) {
 };
 
 
-/* ______________________POST _____________________________*/
 
-function setForm() {
-  // Création de l'objet order 
 
-   const contact = {
-     "firstName" : document.getElementById('firstName').value,
-     "lastName" : document.getElementById('lastName').value,
-     "address" : document.getElementById('address').value,
-     "city" : document.getElementById('city').value,
-     "email" : document.getElementById('email').value 
-   }
-   console.log(contact);
- 
-   let productsOrder = [];
-   for (let product of panier) {
-       productsOrder.push(product.id);
-   }
-   console.log(productsOrder);
- 
-   let order = {
-     "contact" : contact,
-     "products" : productsOrder
-   }
-   console.log(order);
- 
-   //Lorsque tous les champs sont valides, on envoit contact dans le localStorage
-
-   function validControl() {
-     if (validFirstName(document.getElementById('firstName')) 
-     && validLastName(document.getElementById('lastName')) 
-     && validAddress(document.getElementById('address')) 
-     && validCity(document.getElementById('city')) 
-     && validEmail(document.getElementById('email'))) {
-       localStorage.setItem('contact', JSON.stringify(contact));
-       return true;
-     } 
-   };
-  
-   //Si les champs sont valides, on envoit order à l'API
-
-   if (validControl()) {
-     sendOrder(order);
-   }
- }
- 
- function sendOrder (order){
-   fetch("http://localhost:3000/api/products/order", {
-     method: 'POST',
-     body: JSON.stringify(order),
-     headers: { 
-         'Accept': 'application/json', 
-         'Content-Type': 'application/json'  
-         },  
-   })
-     
-   // Puis on récupère la réponse qui est l'ID de la commande
-
-   .then((res) => res.json())
-   .then((data) => {
-     window.location.href = `/front/html/confirmation.html?commande=${data.orderId}`;
-   })
-   .catch(function (err) {
-     console.log(err);
-     alert("erreur");
-   });
+//----------------------------------------------------------------
+// Envoi de la commande
+//----------------------------------------------------------------
+if (page.match("cart")) {
+  let commande = document.querySelector("#order");
+  commande.addEventListener("click", (e) => {
+    // empeche de recharger la page on prévient le reload du bouton
+    e.preventDefault();
+    
+    envoiPaquet();
+   
+  });
 }
- 
- // Au moment du clic on exécute tout
+//----------------------------------------------------------------
+// fonction récupérations des id puis mis dans un tableau
+//----------------------------------------------------------------
+// définition du panier quine comportera que les id des produits choisi du local storage
+let panierId = [];
+function tableauId() {
+// appel des ressources
+let panier = JSON.parse(localStorage.getItem("panierStocké"));
+// récupération des id produit dans panierId
+if (panier && panier.length > 0) {
+  for (let indice of panier) {
+    panierId.push(indice._id);
+  }
+} else {
+  console.log("le panier est vide");
+  document.querySelector("#order").setAttribute("value", "Panier vide!");
+}
+}
+function paquet() {
+  contactRef = JSON.parse(localStorage.getItem("contactClient"));}
+//----------------------------------------------------------------
+// fonction sur la validation de l'envoi
+//----------------------------------------------------------------
 
- function postForm() {
-   const boutonOrder = document.getElementById("order");
-   boutonOrder.addEventListener('click', (event) => {
-     console.log('cliked');
-     event.preventDefault();
-     setForm();
-   })
- }
- postForm();
+function envoiPaquet() {
+  tableauId();
+  paquet();
+  // vision sur le paquet que l'on veut envoyer
+  console.log(commandeFinale);
+  let somme = contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
+  // si le panierId contient des articles et que le clic est autorisé
+  if (panierId.length != 0 && somme === 5) {
+    // envoi à la ressource api
+    fetch("http://localhost:3000/api/products/order", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(commandeFinale),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // envoyé à la page confirmation, autre écriture de la valeur "./confirmation.html?commande=${data.orderId}"
+        window.location.href = `/front/html/confirmation.html?commande=${data.orderId}`;
+      })
+      .catch(function (err) {
+        console.log(err);
+        alert("erreur");
+      });
+  }
+}
 
- 
+//------------------------------------------------------------
+// fonction affichage autoinvoquée du numéro de commande et vide du storage lorsque l'on est sur la page confirmation
+//------------------------------------------------------------
+(function Commande() {
+  if (page.match("confirmation")) {
+    sessionStorage.clear();
+    localStorage.clear();
+    // valeur du numero de commande
+    let numCom = new URLSearchParams(document.location.search).get("commande");
+    // merci et mise en page
+    document.querySelector("#orderId").innerHTML = `<br>${numCom}<br>Merci pour votre achat`;
+    console.log("valeur de l'orderId venant de l'url: " + numCom);
+    //réinitialisation du numero de commande
+    numCom = undefined;
+  } else {
+    console.log("sur page cart");
+  }
+})();
