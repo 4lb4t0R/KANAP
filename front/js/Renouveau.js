@@ -4,7 +4,7 @@
 fetch("http://localhost:3000/api/products")
   .then((res) => res.json())
   .then((objetProduits) => {
-      console.log(objetProduits);
+      //console.log(objetProduits);
       // appel de la fonction affichagePanier
       affichagePanier(objetProduits);
   })
@@ -16,10 +16,13 @@ fetch("http://localhost:3000/api/products")
 // fonction régissant l'affichage du panier
 
 function affichagePanier(index) {
+
   let panier = JSON.parse(localStorage.getItem("panierStocké"));
+  //console.log('panier');
+  //console.log(panier);
    if (panier && panier.length != 0) {
     for (let choix of panier) {
-      console.log(choix);
+      //console.log(choix);
       for (let g = 0, h = index.length; g < h; g++) {
         if (choix._id === index[g]._id) {
           choix.name = index[g].name;
@@ -35,7 +38,7 @@ function affichagePanier(index) {
     document.querySelector("#totalQuantity").innerHTML = "0";
     document.querySelector("#totalPrice").innerHTML = "0";
     document.querySelector("h1").innerHTML =
-      "Vous n'avez pas d'article dans votre panier";
+      "Vous n'avez pas d'article(s) dans votre panier";
   }
   modifQuantité();
   suppression();
@@ -43,9 +46,9 @@ function affichagePanier(index) {
 
 // affichage du panier injecté via mappage
 
-function affiche(indexé) {
+function affiche(index) {
   let zonePanier = document.querySelector("#cart__items");
-  zonePanier.innerHTML += indexé.map((choix) => 
+  zonePanier.innerHTML += index.map((choix) => 
   `<article class="cart__item" data-id="${choix._id}" data-couleur="${choix.couleur}" data-quantité="${choix.quantité}" data-prix="${choix.prix}"> 
     <div class="cart__item__img">
       <img src="${choix.image}" alt="${choix.alt}">
@@ -138,20 +141,20 @@ function totalProduit() {
 // création du formulaire de commande
 
 // les données du client seront stockées dans ce tableau pour la commande sur page panier
-  var contactClient = {};
+  let contactClient = {};
   localStorage.contactClient = JSON.stringify(contactClient);
-  var prenom = document.querySelector("#firstName");
+  let prenom = document.querySelector("#firstName");
   prenom.classList.add("regex_texte");
-  var nom = document.querySelector("#lastName");
+  let nom = document.querySelector("#lastName");
   nom.classList.add("regex_texte");
-  var ville = document.querySelector("#city");
+  let ville = document.querySelector("#city");
   ville.classList.add("regex_texte");
-  var adresse = document.querySelector("#address");
+  let adresse = document.querySelector("#address");
   adresse.classList.add("regex_adresse");
-  var email = document.querySelector("#email");
+  let email = document.querySelector("#email");
   email.classList.add("regex_email");
-  var regexTexte = document.querySelectorAll(".regex_texte");
-  document.querySelector("#email").setAttribute("type", "text");
+  email.setAttribute("type", "text");
+  let regexTexte = document.querySelectorAll(".regex_texte");
 
 // création des regex
 
@@ -161,15 +164,14 @@ let regValideEmail = /^[a-z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]{1,60}$/i;
 let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
 // sécurité du champ de saisie du nom + prenom
-
-  regexTexte.forEach((regexTexte) =>
-    regexTexte.addEventListener("input", (e) => {
-      valeur = e.target.value;
+console.log(regexTexte);
+  regexTexte.forEach((securInp) =>
+  securInp.addEventListener("input", (e) => {
+    console.log(e.target.id);
+      let valeur = e.target.value;
       let regNormal = valeur.search(regexLettre);
       if (regNormal === 0) {
-        contactClient.firstName = prenom.value;
-        contactClient.lastName = nom.value;
-        contactClient.city = ville.value;
+        contactClient[e.target.id] = valeur;
       }
       if (
         contactClient.city !== "" &&
@@ -182,7 +184,7 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
         contactClient.regexNormal = 0;
       }
       localStorage.contactClient = JSON.stringify(contactClient);
-      couleurRegex(regNormal, valeur, regexTexte);
+      couleurRegex(regNormal, valeur, securInp);
       valideClic();
     })
   );
@@ -274,7 +276,7 @@ function couleurRegex(regSearch, valeurEcoute, inputAction) {
 // fonction d'affichage des messages d'erreurs regex (sauf email)
 
 function texteInfo(regex, pointage, zoneEcoute) {
-      if (page.match("cart")) {
+      
       zoneEcoute.addEventListener("input", (e) => {
       valeur = e.target.value;
       index = valeur.search(regex);
@@ -290,7 +292,7 @@ function texteInfo(regex, pointage, zoneEcoute) {
       }
     });
   }
-}
+
 
 // fonction d'accès au clic de validation du formulaire, conditionné par validation des regex
 
@@ -299,6 +301,7 @@ function valideClic() {
   let contactRef = JSON.parse(localStorage.getItem("contactClient"));
   let somme =
     contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
+    console.log(contactRef);
   if (somme === 5) {
     commande.removeAttribute("disabled", "disabled");
     document.querySelector("#order").setAttribute("value", "Commander !");
@@ -314,9 +317,10 @@ function valideClic() {
     e.preventDefault();
     valideClic();
     envoiPaquet();
-  });
-  sessionStorage.clear();
+    sessionStorage.clear();
   localStorage.clear();
+  });
+  
 
 // stockage des ID du panier final dans un tableau
 
@@ -379,15 +383,4 @@ function envoiPaquet() {
 
 // affichage du numéro de la commande + nettoyage du local et session storage
 
-(function Commande() {
-    sessionStorage.clear();
-    localStorage.clear();
-    // valeur du numero de commande
-    let numCom = new URLSearchParams(document.location.search).get("commande");
-    // merci et mise en page
-    document.querySelector("#orderId").innerHTML = `<br>${numCom}<br>Merci pour votre achat`;
-    console.log("valeur de l'orderId venant de l'url: " + numCom);
-    //réinitialisation du numero de commande
-    numCom = undefined;
-  
-})();
+
