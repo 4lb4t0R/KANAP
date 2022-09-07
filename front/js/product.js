@@ -1,25 +1,24 @@
-//RECUPERATION DES INFOS
+// récupération de l'ID du prooduit
 
 const params = new URLSearchParams(document.location.search);
 const id = params.get("_id");
 console.log(id);
 
+// récupération des infos du produit taggé via ID
+
 fetch("http://localhost:3000/api/products")
   .then((res) => res.json())
   .then((objetProduits) => {
-
  lesProduits(objetProduits);
   })
   .catch((err) => {
     document.querySelector(".item").innerHTML = "<h1>erreur 404</h1>";
     console.log("erreur 404, sur ressource api: " + err);
   });
-
   let articleClient = {};
   articleClient._id = id;
 
-
-  //AFFICHAGE DES PRODUITS PAR ID
+  // fonction d'affichage des produits grâce/via leur ID
 
   function lesProduits(produit) {
     let imageAlt = document.querySelector("article div.item__img");
@@ -41,7 +40,7 @@ fetch("http://localhost:3000/api/products")
   console.log("affichage effectué");
 };
 
-//CHOIX DE COULEURS
+// choix des couleurs désirés pour le produit choisi
 
 let choixCouleur = document.querySelector("#colors");
 choixCouleur.addEventListener("input", (ec) => {
@@ -53,7 +52,7 @@ choixCouleur.addEventListener("input", (ec) => {
   console.log(couleurProduit);
 });
 
-//CHOIX QUANTITE PRODUIT
+// choix du nombre de produit que l'on désire
 
 let choixQuantité = document.querySelector('input[id="quantity"]');
 let quantitéProduit;
@@ -65,7 +64,7 @@ choixQuantité.addEventListener("input", (eq) => {
   console.log(quantitéProduit);
 });
 
-//VALIDATION PANIER
+// validation des choix pour ajout au panier
 
 let choixProduit = document.querySelector("#addToCart");
 choixProduit.addEventListener("click", () => {
@@ -83,14 +82,14 @@ choixProduit.addEventListener("click", () => {
   }
 });
 
-//INITIALISATION PANIER
+// création des tableaux servant à 'créer' le panier
 
 let choixProduitClient=[];
 let produitsEnregistrés = [];
 let produitsTemporaires = [];
 let produitsaPousser = [];
 
-//AJOUT PRODUIT DANS TABLEAU VIDE
+// fonction d'ajout de produits dans panier vierge de base
 
 function ajoutPremierProduit() {
   console.log(produitsEnregistrés);
@@ -101,7 +100,7 @@ function ajoutPremierProduit() {
   }
 }
 
-//AJOUTE PRODUIT DANS TABLEAU NON VIERGE
+// fonction d'ajout de produits dans panier NON vierge de base
 
 function ajoutAutreProduit() {
   produitsAPousser = [];
@@ -120,7 +119,7 @@ function ajoutAutreProduit() {
   return (localStorage.panierStocké = JSON.stringify(produitsAPousser));
 }
 
-//REGULATION ARTICLES DANS PANIER
+// fonction d'alerte si choix double sur un même produit
 
 function Panier() {
   produitsEnregistrés = JSON.parse(localStorage.getItem("panierStocké"));
