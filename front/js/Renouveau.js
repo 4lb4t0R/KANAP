@@ -299,7 +299,6 @@ function texteInfo(regex, pointage, zoneEcoute) {
 
   commande.addEventListener("click", (e) => {
     e.preventDefault();
-    
     envoiPaquet();
     sessionStorage.clear();
   localStorage.clear();
@@ -322,7 +321,6 @@ if (panier && panier.length > 0) {
 }
 
 // récupération des données client + du panier final
-
 let contactRef;
 let commandeFinale;
 function paquet() {
@@ -336,10 +334,12 @@ function paquet() {
       email: contactRef.email,
     },
     products: panierId,
+    
   };
 }
 
 // fonction récupérant tout ce qui vient d'être trié et stocké + l'envoie au back-end via POST
+
 function envoiPaquet() {
   tableauId();
   paquet();
@@ -364,7 +364,3 @@ function envoiPaquet() {
       });
   }
 }
-
-// affichage du numéro de la commande + nettoyage du local et session storage
-
-
