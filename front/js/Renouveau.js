@@ -163,7 +163,7 @@ let regexChiffreLettre = /^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúù
 let regValideEmail = /^[a-z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]{1,60}$/i;
 let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
-// sécurité du champ de saisie du nom + prenom
+// sécurité du champ de saisie du nom + prenom + ville
 
   regexTexte.forEach((securInp) =>
   securInp.addEventListener("input", (e) => {
@@ -180,7 +180,7 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
       ) {
         contactClient.regexNormal = 3;
       } else {
-        contactClient.regexNormal = 0;
+        contactClient.regexNormal = 0; alert('Veuillez corriger votre erreur svp');
       }
       localStorage.contactClient = JSON.stringify(contactClient);
       couleurRegex(regNormal, valeur, securInp);
@@ -206,7 +206,7 @@ texteInfo(regexLettre, "#cityErrorMsg", ville);
     if (contactClient.address !== "" && regAdresse === 0) {
       contactClient.regexAdresse = 1;
     } else {
-      contactClient.regexAdresse = 0;
+      contactClient.regexAdresse = 0; alert('Veuillez corriger votre erreur svp');
     }
     localStorage.contactClient = JSON.stringify(contactClient);
     couleurRegex(regAdresse, valeur, regexAdresse);
@@ -228,7 +228,7 @@ texteInfo(regexChiffreLettre, "#addressErrorMsg", adresse);
       contactClient.email = email.value;
       contactClient.regexEmail = 1;
     } else {
-      contactClient.regexEmail = 0;
+      contactClient.regexEmail = 0; alert('Veuillez corriger votre erreur svp');
     }
     localStorage.contactClient = JSON.stringify(contactClient);
     couleurRegex(regValide, valeur, regexEmail);
