@@ -85,18 +85,18 @@ choixProduit.addEventListener("click", () => {
 // création des tableaux servant à 'créer' le panier
 
 let choixProduitClient=[];
-let produitsEnregistrés = [];
+let produitsEnregistred = [];
 let produitsTemporaires = [];
 let produitsaPousser = [];
 
 // fonction d'ajout de produits dans panier vierge de base
 
 function ajoutPremierProduit() {
-  console.log(produitsEnregistrés);
-  if (produitsEnregistrés === null) {
+  console.log(produitsEnregistred);
+  if (produitsEnregistred === null) {
     choixProduitClient.push(articleClient);
     console.log(articleClient);
-    return (localStorage.panierStocké = JSON.stringify(choixProduitClient));
+    return (localStorage.panierStocked = JSON.stringify(choixProduitClient));
   }
 }
 
@@ -105,7 +105,7 @@ function ajoutPremierProduit() {
 function ajoutAutreProduit() {
   produitsAPousser = [];
   produitsTemporaires.push(articleClient);
-  produitsAPousser = [...produitsEnregistrés, ...produitsTemporaires];
+  produitsAPousser = [...produitsEnregistred, ...produitsTemporaires];
   produitsAPousser.sort(function triage(a, b) {
     if (a._id < b._id) return -1;
     if (a._id > b._id) return 1;
@@ -116,20 +116,20 @@ function ajoutAutreProduit() {
     return 0;
   });
   produitsTemporaires = [];
-  return (localStorage.panierStocké = JSON.stringify(produitsAPousser));
+  return (localStorage.panierStocked = JSON.stringify(produitsAPousser));
 }
 
 // fonction d'alerte si choix double sur un même produit
 
 function Panier() {
-  produitsEnregistrés = JSON.parse(localStorage.getItem("panierStocké"));
-  if (produitsEnregistrés) {
-    for (let choix of produitsEnregistrés) {
+  produitsEnregistred = JSON.parse(localStorage.getItem("panierStocked"));
+  if (produitsEnregistred) {
+    for (let choix of produitsEnregistred) {
       if (choix._id === id && choix.couleur === articleClient.couleur) {
         alert("RAPPEL: Vous avez déja choisi cet article.");
         let additionQuantité = parseInt(choix.quantité) + parseInt(quantitéProduit);
         choix.quantité = JSON.stringify(additionQuantité);
-        return (localStorage.panierStocké = JSON.stringify(produitsEnregistrés));
+        return (localStorage.panierStocked = JSON.stringify(produitsEnregistred));
       }
     }
     return ajoutAutreProduit();

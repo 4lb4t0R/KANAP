@@ -17,7 +17,7 @@ fetch("http://localhost:3000/api/products")
 
 function affichagePanier(index) {
 
-  let panier = JSON.parse(localStorage.getItem("panierStocké"));
+  let panier = JSON.parse(localStorage.getItem("panierStocked"));
   //console.log('panier');
   //console.log(panier);
    if (panier && panier.length != 0) {
@@ -80,14 +80,14 @@ function modifQuantité() {
   const cart = document.querySelectorAll(".cart__item");
   cart.forEach((cart) => {
     cart.addEventListener("change", (eq) => {
-      let panier = JSON.parse(localStorage.getItem("panierStocké"));
+      let panier = JSON.parse(localStorage.getItem("panierStocked"));
       for (article of panier)
         if (
           article._id === cart.dataset.id &&
           cart.dataset.couleur === article.couleur
         ) {
           article.quantité = eq.target.value;
-          localStorage.panierStocké = JSON.stringify(panier);
+          localStorage.panierStocked = JSON.stringify(panier);
           cart.dataset.quantité = eq.target.value;
           totalProduit();
         }
@@ -101,14 +101,14 @@ function suppression() {
   const cartdelete = document.querySelectorAll(".cart__item .deleteItem");
   cartdelete.forEach((cartdelete) => {
     cartdelete.addEventListener("click", () => {
-      let panier = JSON.parse(localStorage.getItem("panierStocké"));
+      let panier = JSON.parse(localStorage.getItem("panierStocked"));
       for (let d = 0, c = panier.length; d < c; d++)
         if (
           panier[d]._id === cartdelete.dataset.id &&
           panier[d].couleur === cartdelete.dataset.couleur
         ) {
           const num = [d];
-          let nouveauPanier = JSON.parse(localStorage.getItem("panierStocké"));
+          let nouveauPanier = JSON.parse(localStorage.getItem("panierStocked"));
           nouveauPanier.splice(num, 1);
           if (nouveauPanier && nouveauPanier.length == 0) {
             document.querySelector("#totalQuantity").innerHTML = "0";
@@ -116,7 +116,7 @@ function suppression() {
             document.querySelector("h1").innerHTML =
               "Vous n'avez pas d'article(s) dans votre panier";
           }
-          localStorage.panierStocké = JSON.stringify(nouveauPanier);
+          localStorage.panierStocked = JSON.stringify(nouveauPanier);
           totalProduit(); 
           return location.reload();
         }
@@ -165,7 +165,6 @@ let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+
 
 // sécurité du champ de saisie du nom + prenom
 
-console.log(regexTexte);
   regexTexte.forEach((securInp) =>
   securInp.addEventListener("input", (e) => {
       let valeur = e.target.value;
@@ -311,7 +310,7 @@ function texteInfo(regex, pointage, zoneEcoute) {
 
 let panierId = [];
 function tableauId() {
-let panier = JSON.parse(localStorage.getItem("panierStocké"));
+let panier = JSON.parse(localStorage.getItem("panierStocked"));
 if (panier && panier.length > 0) {
   for (let indice of panier) {
     panierId.push(indice._id);
