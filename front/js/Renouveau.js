@@ -164,10 +164,10 @@ let regValideEmail = /^[a-z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]{1,60}$/i;
 let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
 // sécurité du champ de saisie du nom + prenom
+
 console.log(regexTexte);
   regexTexte.forEach((securInp) =>
   securInp.addEventListener("input", (e) => {
-    console.log(e.target.id);
       let valeur = e.target.value;
       let regNormal = valeur.search(regexLettre);
       if (regNormal === 0) {
@@ -185,7 +185,7 @@ console.log(regexTexte);
       }
       localStorage.contactClient = JSON.stringify(contactClient);
       couleurRegex(regNormal, valeur, securInp);
-      valideClic();
+      
     })
   );
 
@@ -211,7 +211,7 @@ texteInfo(regexLettre, "#cityErrorMsg", ville);
     }
     localStorage.contactClient = JSON.stringify(contactClient);
     couleurRegex(regAdresse, valeur, regexAdresse);
-    valideClic();
+    
   });
 
 // regex d'affichage du message d'erreur si erreur il y a (sur l'adresse)
@@ -233,7 +233,7 @@ texteInfo(regexChiffreLettre, "#addressErrorMsg", adresse);
     }
     localStorage.contactClient = JSON.stringify(contactClient);
     couleurRegex(regValide, valeur, regexEmail);
-    valideClic();
+    
   });
 
 // affichage du message d'erreur pour l'email, si erreur il y a
@@ -294,28 +294,13 @@ function texteInfo(regex, pointage, zoneEcoute) {
   }
 
 
-// fonction d'accès au clic de validation du formulaire, conditionné par validation des regex
-
-let commande = document.querySelector("#order");
-function valideClic() {
-  let contactRef = JSON.parse(localStorage.getItem("contactClient"));
-  let somme =
-    contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
-    console.log(contactRef);
-  if (somme === 5) {
-    commande.removeAttribute("disabled", "disabled");
-    document.querySelector("#order").setAttribute("value", "Commander !");
-  } else {
-    commande.setAttribute("disabled", "disabled");
-    document.querySelector("#order").setAttribute("value", "Remplir le formulaire");
-  }
-}
+  let commande = document.querySelector("#order");
 
 // envoi de la commande validée
 
   commande.addEventListener("click", (e) => {
     e.preventDefault();
-    valideClic();
+    
     envoiPaquet();
     sessionStorage.clear();
   localStorage.clear();
