@@ -54,14 +54,14 @@ choixCouleur.addEventListener("input", (ec) => {
 
 // choix du nombre de produit que l'on désire
 
-let choixQuantité = document.querySelector('input[id="quantity"]');
-let quantitéProduit;
-choixQuantité.addEventListener("input", (eq) => {
-  quantitéProduit = eq.target.value;
-  articleClient.quantité = quantitéProduit;
+let choixQuantitay = document.querySelector('input[id="quantity"]');
+let quantitayProduit;
+choixQuantitay.addEventListener("input", (eq) => {
+  quantitayProduit = eq.target.value;
+  articleClient.quantitay = quantitayProduit;
   document.querySelector("#addToCart").style.color = "white";
   document.querySelector("#addToCart").textContent = "Ajouter au panier";
-  console.log(quantitéProduit);
+  console.log(quantitayProduit);
 });
 
 // validation des choix pour ajout au panier
@@ -69,9 +69,9 @@ choixQuantité.addEventListener("input", (eq) => {
 let choixProduit = document.querySelector("#addToCart");
 choixProduit.addEventListener("click", () => {
   if (
-    articleClient.quantité < 1 ||
-    articleClient.quantité > 100 ||
-    articleClient.quantité === undefined ||
+    articleClient.quantitay < 1 ||
+    articleClient.quantitay > 100 ||
+    articleClient.quantitay === undefined ||
     articleClient.couleur === "" ||
     articleClient.couleur === undefined
   ) { alert("Pour valider votre choix, veuillez choisir une couleur, et/ou une quantité comprise entre 1 et 100");}
@@ -127,8 +127,8 @@ function Panier() {
     for (let choix of produitsEnregistred) {
       if (choix._id === id && choix.couleur === articleClient.couleur) {
         alert("RAPPEL: Vous avez déja choisi cet article.");
-        let additionQuantité = parseInt(choix.quantité) + parseInt(quantitéProduit);
-        choix.quantité = JSON.stringify(additionQuantité);
+        let additionQuantitay = parseInt(choix.quantitay) + parseInt(quantitayProduit);
+        choix.quantitay = JSON.stringify(additionQuantitay);
         return (localStorage.panierStocked = JSON.stringify(produitsEnregistred));
       }
     }
