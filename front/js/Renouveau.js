@@ -191,7 +191,7 @@ regexTexte.forEach((securInp) =>
     } else {
       contactClient.regexNormal = 0;
       securInp.classList.remove("regex_ok");
-      // alert("Veuillez corriger votre erreur svp");
+      // alert("Veuillez corriger votre erreur silvouplaît");
     }
     localStorage.contactClient = JSON.stringify(contactClient);
     couleurRegex(regNormal, valeur, securInp);
@@ -220,7 +220,7 @@ regexAdresse.addEventListener("input", (e) => {
     contactClient.regexAdresse = 0;
     adresse.classList.remove("regex_ok");
 
-    // alert("Veuillez corriger votre erreur svp");
+    // alert("Veuillez corriger votre erreur silvouplaît");
   }
   localStorage.contactClient = JSON.stringify(contactClient);
   couleurRegex(regAdresse, valeur, regexAdresse);
