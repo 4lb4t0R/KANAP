@@ -1,26 +1,27 @@
-
 // appel de l'API
 
 fetch("http://localhost:3000/api/products")
   .then((res) => res.json())
   .then((objetProduits) => {
-      //console.log(objetProduits);
-      // appel de la fonction affichagePanier
-      affichagePanier(objetProduits);
+    //console.log(objetProduits);
+    // appel de la fonction affichagePanier
+    affichagePanier(objetProduits);
   })
   .catch((err) => {
-      document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
-      console.log("erreur 404, sur ressource api: " + err);
+    console.error(err);
+    document.querySelector("#cartAndFormContainer").innerHTML =
+      "<h1>erreur 404</h1>";
+    console.log("erreur 404, sur ressource api: " + err);
   });
 
 // fonction régissant l'affichage du panier
 
 function affichagePanier(index) {
-
+  console.log(index);
   let panier = JSON.parse(localStorage.getItem("panierStocked"));
   //console.log('panier');
   //console.log(panier);
-   if (panier && panier.length != 0) {
+  if (panier && panier.length != 0) {
     for (let choix of panier) {
       //console.log(choix);
       for (let g = 0, h = index.length; g < h; g++) {
@@ -40,16 +41,19 @@ function affichagePanier(index) {
     document.querySelector("h1").innerHTML =
       "Vous n'avez pas d'article(s) dans votre panier";
   }
-  modifQuantité();
+  modifQuantitay();
   suppression();
 }
 
 // affichage du panier injecté via mappage
 
 function affiche(index) {
+  console.log(index);
   let zonePanier = document.querySelector("#cart__items");
-  zonePanier.innerHTML += index.map((choix) => 
-  `<article class="cart__item" data-id="${choix._id}" data-couleur="${choix.couleur}" data-quantité="${choix.quantité}" data-prix="${choix.prix}"> 
+  zonePanier.innerHTML += index
+    .map(
+      (choix) =>
+        `<article class="cart__item" data-id="${choix._id}" data-couleur="${choix.couleur}" data-quantitay="${choix.quantitay}" data-prix="${choix.prix}"> 
     <div class="cart__item__img">
       <img src="${choix.image}" alt="${choix.alt}">
     </div>
@@ -62,7 +66,7 @@ function affiche(index) {
       <div class="cart__item__content__settings">
         <div class="cart__item__content__settings__quantity">
           <p>Qté : </p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${choix.quantité}">
+          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${choix.quantitay}">
         </div>
         <div class="cart__item__content__settings__delete">
           <p class="deleteItem" data-id="${choix._id}" data-couleur="${choix.couleur}">Supprimer</p>
@@ -70,13 +74,14 @@ function affiche(index) {
       </div>
     </div>
   </article>`
-    ).join("");
+    )
+    .join("");
   totalProduit();
 }
 
 // modifications dynamiques du panier
 
-function modifQuantité() {
+function modifQuantitay() {
   const cart = document.querySelectorAll(".cart__item");
   cart.forEach((cart) => {
     cart.addEventListener("change", (eq) => {
@@ -86,16 +91,16 @@ function modifQuantité() {
           article._id === cart.dataset.id &&
           cart.dataset.couleur === article.couleur
         ) {
-          article.quantité = eq.target.value;
+          article.quantitay = eq.target.value;
           localStorage.panierStocked = JSON.stringify(panier);
-          cart.dataset.quantité = eq.target.value;
+          cart.dataset.quantitay = eq.target.value;
           totalProduit();
         }
     });
   });
 }
 
-// suppression dynamique du panier 
+// suppression dynamique du panier
 
 function suppression() {
   const cartdelete = document.querySelectorAll(".cart__item .deleteItem");
@@ -117,22 +122,23 @@ function suppression() {
               "Vous n'avez pas d'article(s) dans votre panier";
           }
           localStorage.panierStocked = JSON.stringify(nouveauPanier);
-          totalProduit(); 
+          totalProduit();
           return location.reload();
         }
     });
   });
 }
 
- // fonction d'affichage et de calcul du total de la commande, dynamique
+// fonction d'affichage et de calcul du total de la commande, dynamique
 
 function totalProduit() {
   let totalArticle = 0;
   let totalPrix = 0;
   const cart = document.querySelectorAll(".cart__item");
   cart.forEach((cart) => {
-    totalArticle += JSON.parse(cart.dataset.quantité);
-    totalPrix += cart.dataset.quantité * cart.dataset.prix;
+    console.log(cart.dataset.quantitay);
+    totalArticle += JSON.parse(cart.dataset.quantitay);
+    totalPrix += cart.dataset.quantitay * cart.dataset.prix;
   });
   document.getElementById("totalQuantity").textContent = totalArticle;
   document.getElementById("totalPrice").textContent = totalPrix;
@@ -141,52 +147,56 @@ function totalProduit() {
 // création du formulaire de commande
 
 // les données du client seront stockées dans ce tableau pour la commande sur page panier
-  let contactClient = {};
-  localStorage.contactClient = JSON.stringify(contactClient);
-  let prenom = document.querySelector("#firstName");
-  prenom.classList.add("regex_texte");
-  let nom = document.querySelector("#lastName");
-  nom.classList.add("regex_texte");
-  let ville = document.querySelector("#city");
-  ville.classList.add("regex_texte");
-  let adresse = document.querySelector("#address");
-  adresse.classList.add("regex_adresse");
-  let email = document.querySelector("#email");
-  email.classList.add("regex_email");
-  email.setAttribute("type", "text");
-  let regexTexte = document.querySelectorAll(".regex_texte");
+let contactClient = {};
+localStorage.contactClient = JSON.stringify(contactClient);
+let prenom = document.querySelector("#firstName");
+prenom.classList.add("regex_texte");
+let nom = document.querySelector("#lastName");
+nom.classList.add("regex_texte");
+let ville = document.querySelector("#city");
+ville.classList.add("regex_texte");
+let adresse = document.querySelector("#address");
+adresse.classList.add("regex_adresse");
+let email = document.querySelector("#email");
+email.classList.add("regex_email");
+email.setAttribute("type", "text");
+let regexTexte = document.querySelectorAll(".regex_texte");
 
 // création des regex
 
 let regexLettre = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ\s-]{1,31}$/i;
 let regexChiffreLettre = /^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ\s-]{1,60}$/i;
 let regValideEmail = /^[a-z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]{1,60}$/i;
-let regMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
+let regMatchEmail =
+  /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
 // sécurité du champ de saisie du nom + prenom + ville
 
-  regexTexte.forEach((securInp) =>
+regexTexte.forEach((securInp) =>
   securInp.addEventListener("input", (e) => {
-      let valeur = e.target.value;
-      let regNormal = valeur.search(regexLettre);
-      if (regNormal === 0) {
-        contactClient[e.target.id] = valeur;
-      }
-      if (
-        contactClient.city !== "" &&
-        contactClient.lastName !== "" &&
-        contactClient.firstName !== "" &&
-        regNormal === 0
-      ) {
-        contactClient.regexNormal = 3;
-      } else {
-        contactClient.regexNormal = 0; alert('Veuillez corriger votre erreur svp');
-      }
-      localStorage.contactClient = JSON.stringify(contactClient);
-      couleurRegex(regNormal, valeur, securInp);
-      
-    })
-  );
+    let valeur = e.target.value;
+    let regNormal = valeur.search(regexLettre);
+    if (regNormal === 0) {
+      contactClient[e.target.id] = valeur;
+    }
+    if (
+      contactClient.city !== "" &&
+      contactClient.lastName !== "" &&
+      contactClient.firstName !== "" &&
+      regNormal === 0
+    ) {
+      contactClient.regexNormal = 3;
+      // add class valid
+      securInp.classList.add("regex_ok");
+    } else {
+      contactClient.regexNormal = 0;
+      securInp.classList.remove("regex_ok");
+      // alert("Veuillez corriger votre erreur svp");
+    }
+    localStorage.contactClient = JSON.stringify(contactClient);
+    couleurRegex(regNormal, valeur, securInp);
+  })
+);
 
 // regex d'affichage de msg d'erreurs si erreur il y a (sur nom prenom ou ville)
 
@@ -196,22 +206,25 @@ texteInfo(regexLettre, "#cityErrorMsg", ville);
 
 // sécurité du champ de saisie de l'adresse
 
-  let regexAdresse = document.querySelector(".regex_adresse");
-  regexAdresse.addEventListener("input", (e) => {
-    valeur = e.target.value;
-    let regAdresse = valeur.search(regexChiffreLettre);
-    if (regAdresse == 0) {
-      contactClient.address = adresse.value;
-    }
-    if (contactClient.address !== "" && regAdresse === 0) {
-      contactClient.regexAdresse = 1;
-    } else {
-      contactClient.regexAdresse = 0; alert('Veuillez corriger votre erreur svp');
-    }
-    localStorage.contactClient = JSON.stringify(contactClient);
-    couleurRegex(regAdresse, valeur, regexAdresse);
-    
-  });
+let regexAdresse = document.querySelector(".regex_adresse");
+regexAdresse.addEventListener("input", (e) => {
+  valeur = e.target.value;
+  let regAdresse = valeur.search(regexChiffreLettre);
+  if (regAdresse == 0) {
+    contactClient.address = adresse.value;
+  }
+  if (contactClient.address !== "" && regAdresse === 0) {
+    contactClient.regexAdresse = 1;
+    adresse.classList.add("regex_ok");
+  } else {
+    contactClient.regexAdresse = 0;
+    adresse.classList.remove("regex_ok");
+
+    // alert("Veuillez corriger votre erreur svp");
+  }
+  localStorage.contactClient = JSON.stringify(contactClient);
+  couleurRegex(regAdresse, valeur, regexAdresse);
+});
 
 // regex d'affichage du message d'erreur si erreur il y a (sur l'adresse)
 
@@ -219,42 +232,51 @@ texteInfo(regexChiffreLettre, "#addressErrorMsg", adresse);
 
 // sécurité du champ de saisie de l'email
 
-  let regexEmail = document.querySelector(".regex_email");
-  regexEmail.addEventListener("input", (e) => {
-    valeur = e.target.value;
-    let regMatch = valeur.match(regMatchEmail);
-    let regValide = valeur.search(regValideEmail);
-    if (regValide === 0 && regMatch !== null) {
-      contactClient.email = email.value;
-      contactClient.regexEmail = 1;
-    } else {
-      contactClient.regexEmail = 0; alert('Veuillez corriger votre erreur svp');
-    }
-    localStorage.contactClient = JSON.stringify(contactClient);
-    couleurRegex(regValide, valeur, regexEmail);
-    
-  });
+let regexEmail = document.querySelector(".regex_email");
+regexEmail.addEventListener("input", (e) => {
+  valeur = e.target.value;
+  let regMatch = valeur.match(regMatchEmail);
+  console.log({ regMatch });
+  let regValide = valeur.search(regValideEmail);
+  console.log({ regValide });
+  if (regMatch !== null) {
+    contactClient.email = email.value;
+    contactClient.regexEmail = 1;
+    email.classList.add("regex_ok");
+  } else {
+    contactClient.regexEmail = 0;
+    email.classList.remove("regex_ok");
+
+    // console.log("Veuillez corriger votre erreur svp");
+  }
+  localStorage.contactClient = JSON.stringify(contactClient);
+  couleurRegex(regValide, valeur, regexEmail);
+});
 
 // affichage du message d'erreur pour l'email, si erreur il y a
 
-  email.addEventListener("input", (e) => {
-    valeur = e.target.value;
-    let regMatch = valeur.match(regMatchEmail);
-    let regValide = valeur.search(regValideEmail);
-    if (valeur === "" && regMatch === null) {
-      document.querySelector("#emailErrorMsg").textContent = "Veuillez renseigner votre email.";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    } else if ( regValide !== 0) {
-      document.querySelector("#emailErrorMsg").innerHTML = "Caractère(s) non valide(s)";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    } else if (valeur != "" && regMatch == null) {
-      document.querySelector("#emailErrorMsg").innerHTML = "Caratère(s) accepté(s) pour ce champ. Forme email non conforme";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    } else {
-      document.querySelector("#emailErrorMsg").innerHTML = "Forme email conforme.";
-      document.querySelector("#emailErrorMsg").style.color = "white";
-    }
-  });
+email.addEventListener("input", (e) => {
+  valeur = e.target.value;
+  let regMatch = valeur.match(regMatchEmail);
+  let regValide = valeur.search(regValideEmail);
+  if (valeur === "" && regMatch === null) {
+    document.querySelector("#emailErrorMsg").textContent =
+      "Veuillez renseigner votre email.";
+    document.querySelector("#emailErrorMsg").style.color = "white";
+  } else if (regValide !== 0) {
+    document.querySelector("#emailErrorMsg").innerHTML =
+      "Caractère(s) non valide(s)";
+    document.querySelector("#emailErrorMsg").style.color = "white";
+  } else if (valeur != "" && regMatch == null) {
+    document.querySelector("#emailErrorMsg").innerHTML =
+      "Caratère(s) accepté(s) pour ce champ. Forme email non conforme";
+    document.querySelector("#emailErrorMsg").style.color = "white";
+  } else {
+    document.querySelector("#emailErrorMsg").innerHTML =
+      "Forme email conforme.";
+    document.querySelector("#emailErrorMsg").style.color = "white";
+  }
+});
 
 // fonction d'aide visuelle selon le remplissage des champs, et si il y a des erreurs ou non
 
@@ -275,49 +297,53 @@ function couleurRegex(regSearch, valeurEcoute, inputAction) {
 // fonction d'affichage des messages d'erreurs regex (sauf email)
 
 function texteInfo(regex, pointage, zoneEcoute) {
-      
-      zoneEcoute.addEventListener("input", (e) => {
-      valeur = e.target.value;
-      index = valeur.search(regex);
-      if (valeur === "" && index != 0) {
-        document.querySelector(pointage).textContent = "Veuillez renseigner ce champ.";
-        document.querySelector(pointage).style.color = "white";
-      } else if (valeur !== "" && index != 0) {
-        document.querySelector(pointage).innerHTML = "Reformulez cette donnée";
-        document.querySelector(pointage).style.color = "white";
-      } else {
-      document.querySelector(pointage).innerHTML = "Caratères acceptés pour ce champ.";
+  zoneEcoute.addEventListener("input", (e) => {
+    valeur = e.target.value;
+    index = valeur.search(regex);
+    if (valeur === "" && index != 0) {
+      document.querySelector(pointage).textContent =
+        "Veuillez renseigner ce champ.";
       document.querySelector(pointage).style.color = "white";
-      }
-    });
-  }
+    } else if (valeur !== "" && index != 0) {
+      document.querySelector(pointage).innerHTML = "Reformulez cette donnée";
+      document.querySelector(pointage).style.color = "white";
+    } else {
+      document.querySelector(pointage).innerHTML =
+        "Caratères acceptés pour ce champ.";
+      document.querySelector(pointage).style.color = "white";
+    }
+  });
+}
 
-
-  let commande = document.querySelector("#order");
+let commande = document.querySelector("#order");
 
 // envoi de la commande validée
 
-  commande.addEventListener("click", (e) => {
-    e.preventDefault();
+commande.addEventListener("click", (e) => {
+  e.preventDefault();
+  const regexIsOk = document.querySelectorAll(".regex_ok");
+  if (regexIsOk.length === 5) {
     envoiPaquet();
     sessionStorage.clear();
-  localStorage.clear();
-  });
-  
+    localStorage.clear();
+  } else {
+    alert("Veuillez corriger vos erreurs");
+  }
+});
 
 // stockage des ID du panier final dans un tableau
 
 let panierId = [];
 function tableauId() {
-let panier = JSON.parse(localStorage.getItem("panierStocked"));
-if (panier && panier.length > 0) {
-  for (let indice of panier) {
-    panierId.push(indice._id);
+  let panier = JSON.parse(localStorage.getItem("panierStocked"));
+  if (panier && panier.length > 0) {
+    for (let indice of panier) {
+      panierId.push(indice._id);
+    }
+  } else {
+    console.log("le panier est vide");
+    document.querySelector("#order").setAttribute("value", "Panier vide!");
   }
-} else {
-  console.log("le panier est vide");
-  document.querySelector("#order").setAttribute("value", "Panier vide!");
-}
 }
 
 // récupération des données client + du panier final
@@ -334,7 +360,6 @@ function paquet() {
       email: contactRef.email,
     },
     products: panierId,
-    
   };
 }
 
@@ -344,7 +369,8 @@ function envoiPaquet() {
   tableauId();
   paquet();
   console.log(commandeFinale);
-  let somme = contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
+  let somme =
+    contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
   if (panierId.length != 0 && somme === 5) {
     fetch("http://localhost:3000/api/products/order", {
       method: "POST",
